@@ -4,6 +4,7 @@ import swaggerDocs from './config/swagger.js';
 import roleRoutes from './routes/roleRoutes.js';
 import shippingMethodsRoutes from './routes/shippingMethodsRouter.js';
 import stagesRoutes from './routes/stagesRoutes.js'; 
+import userRoutes from './routes/userRoutes.js'; 
 
 
 dotenv.config();
@@ -20,6 +21,7 @@ app.get('/', (req, res) => {
 app.use('/api/roles', roleRoutes);
 app.use('/api/metodos-de-envio', shippingMethodsRoutes);
 app.use('/api/estados', stagesRoutes); 
+app.use('/api/usuarios', userRoutes);
 
 app.listen(port, () => {
   console.log(`API available at http://localhost:${port}`);
