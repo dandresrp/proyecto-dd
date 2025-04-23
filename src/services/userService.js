@@ -3,7 +3,7 @@ import {
   findUserById,
   updateUserById,
   deleteUserById,
-} from '../../models/user/userModel.js';
+} from '../../src/models/userModel.js';
 
 export const getAllUsers = async () => {
   try {

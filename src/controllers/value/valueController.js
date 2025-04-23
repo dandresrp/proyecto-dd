@@ -1,4 +1,4 @@
-import { getAllValues as getValues } from '../../services/value/valueService.js';
+import { getAllValues as getValues } from '../../services/valueService.js';
 
 export const getAllValues = async (req, res) => {
   try {

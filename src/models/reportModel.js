@@ -1,4 +1,4 @@
-import { query } from '../../config/db.js';
+import { query } from '../../src/config/db.js';
 import {
   SQL_GET_INCOME_BY_MONTH,
   SQL_GET_ORDERS_BY_MONTH,
@@ -8,7 +8,7 @@ import {
   SQL_GET_BEST_SELLING_PRODUCTS_HISTORY,
   SQL_GET_INVENTORY,
   SQL_GET_PRODUCTION_CAPACITY,
-} from '../../controllers/report/sql.js';
+} from '../../src/controllers/report/sql.js';
 
 export const findOrdersByMonth = async (startDate, endDate, offset, limit) => {
   const result = await query(SQL_GET_ORDERS_BY_MONTH, [

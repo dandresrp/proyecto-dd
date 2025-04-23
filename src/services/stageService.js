@@ -1,4 +1,4 @@
-import { findAllStages } from '../../models/stages/stageModel.js';
+import { findAllStages } from '../../src/models/stageModel.js';
 
 export const getAllStages = async () => {
   try {

@@ -7,7 +7,7 @@ import {
   getBestSellingProductsHistory as getBestSellingProductsHistoryService,
   getInventory as getInventoryService,
   getProductionCapacity as getProductionCapacityService,
-} from '../../services/report/reportService.js';
+} from '../../services/reportService.js';
 
 export const getOrdersByMonth = async (req, res) => {
   try {
