@@ -1,7 +1,7 @@
 import {
   getAllOrders as getOrders,
   getOrderById as getOrder,
-} from '../../services/orders/orderService.js';
+} from '../../services/orderService.js';
 
 export const getAllOrders = async (req, res) => {
   try {
