@@ -1,10 +1,9 @@
-import { query } from '../../config/db.js';
-import { SQL_GET_ALL_STAGES } from './sql.js';
+import { getAllStages as getStages } from '../../services/stages/stageService.js';
 
 export const getAllStages = async (req, res) => {
   try {
-    const result = await query(SQL_GET_ALL_STAGES);
-    res.success(result.rows);
+    const stages = await getStages();
+    res.success(stages);
   } catch (error) {
     console.error('Error al obtener estados:', error);
     res.error('Error al obtener estados');

@@ -1,10 +1,9 @@
-import { query } from '../../config/db.js';
-import { SQL_GET_ALL_VALUES } from './sql.js';
+import { getAllValues as getValues } from '../../services/value/valueService.js';
 
 export const getAllValues = async (req, res) => {
   try {
-    const result = await query(SQL_GET_ALL_VALUES);
-    res.success(result.rows);
+    const values = await getValues();
+    res.success(values);
   } catch (error) {
     console.error('Error al obtener valores:', error);
     res.error('Error al obtener valores');
