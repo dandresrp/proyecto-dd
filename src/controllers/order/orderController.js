@@ -1,108 +1,76 @@
-import { query } from '../../config/db.js';
+import * as orderService from '../../services/orderService.js';
 
 export const createOrder = async (req, res) => {
   if (!req.body || !req.usuario) {
-    return res.status(400).json({
-      success: false,
-      data: 'Datos de la solicitud incompletos',
-    });
+    return res.error('Datos de la solicitud incompletos', 400);
   }
 
-  const { id_cliente, notas, fecha_estimada_entrega, metodo_envio, detalles } =
-    req.body;
-  const id_usuario_recepcion = req.usuario?.id_usuario; // Validar que req.usuario tenga id_usuario
+  try {
+    const result = await orderService.createOrder(
+      req.body,
+      req.usuario.id_usuario,
+    );
+    res.success({ id_pedido: result.id_pedido }, result.message, 201);
+  } catch (error) {
+    if (
+      error.message === 'Faltan datos obligatorios o detalles del pedido' ||
+      error.message === 'Faltan datos en los detalles del pedido' ||
+      error.message === 'Usuario no autenticado'
+    ) {
+      return res.error(error.message, 400);
+    }
+
+    console.error('Error al crear el pedido:', error);
+    res.error('Error al crear el pedido', 500);
+  }
+};
+
+export const getOrderById = async (req, res) => {
+  const { id_pedido } = req.params;
 
   try {
-    // Validación básica
-    if (!id_cliente || !detalles || detalles.length === 0) {
-      return res.status(400).json({
-        success: false,
-        data: 'Faltan datos obligatorios o detalles del pedido',
-      });
+    const order = await orderService.getOrderDetails(id_pedido);
+    res.success(order);
+  } catch (error) {
+    if (error.message === 'Pedido no encontrado') {
+      return res.error('Pedido no encontrado', 404);
     }
 
-    if (!id_usuario_recepcion) {
-      return res.status(400).json({
-        success: false,
-        data: 'Usuario no autenticado',
-      });
+    console.error('Error al obtener detalles del pedido:', error);
+    res.error('Error al obtener detalles del pedido', 500);
+  }
+};
+
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = await orderService.getAllOrders();
+    res.success(orders);
+  } catch (error) {
+    console.error('Error al obtener pedidos:', error);
+    res.error('Error al obtener pedidos', 500);
+  }
+};
+
+export const updateOrderStatus = async (req, res) => {
+  const { id_pedido } = req.params;
+  const { estado } = req.body;
+
+  if (!estado) {
+    return res.error('El estado es requerido', 400);
+  }
+
+  try {
+    const result = await orderService.updateOrderStatus(id_pedido, estado);
+    res.success(result.data, result.message);
+  } catch (error) {
+    if (error.message === 'Estado no válido') {
+      return res.error('El estado proporcionado no es válido', 400);
+    }
+    if (error.message === 'Pedido no encontrado') {
+      return res.error('Pedido no encontrado', 404);
     }
 
-    // Inicia una transacción
-    await query('BEGIN');
-
-    // Inserta en la tabla pedidos
-    const insertPedidoQuery = `
-            INSERT INTO pedidos (id_cliente, id_usuario_recepcion, notas, fecha_estimada_entrega, metodo_envio)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING id_pedido
-        `;
-    const pedidoResult = await query(insertPedidoQuery, [
-      id_cliente,
-      id_usuario_recepcion,
-      notas,
-      fecha_estimada_entrega,
-      metodo_envio,
-    ]);
-
-    if (
-      !pedidoResult.rows ||
-      !Array.isArray(pedidoResult.rows) ||
-      pedidoResult.rows.length === 0
-    ) {
-      await query('ROLLBACK');
-      return res.status(500).json({
-        success: false,
-        data: 'Error al obtener el ID del pedido creado',
-      });
-    }
-
-    const id_pedido = pedidoResult.rows[0]?.id_pedido;
-
-    if (!id_pedido) {
-      await query('ROLLBACK');
-      return res.status(500).json({
-        success: false,
-        data: 'El ID del pedido no está disponible',
-      });
-    }
-
-    // Inserta en la tabla detallespedido
-    const insertDetalleQuery = `
-            INSERT INTO detallespedido (id_pedido, id_producto, cantidad)
-            VALUES ($1, $2, $3)
-        `;
-
-    for (const detalle of detalles) {
-      const { id_producto, cantidad } = detalle;
-
-      // Validación básica para cada detalle
-      if (!id_producto || !cantidad) {
-        await query('ROLLBACK');
-        return res.status(400).json({
-          success: false,
-          data: 'Faltan datos en los detalles del pedido',
-        });
-      }
-
-      await query(insertDetalleQuery, [id_pedido, id_producto, cantidad]);
-    }
-
-    // Confirma la transacción
-    await query('COMMIT');
-
-    res.status(201).json({
-      success: true,
-      data: 'Pedido creado exitosamente',
-      pedido: { id_pedido },
-    });
-  } catch (err) {
-    // Si ocurre un error, deshace la transacción
-    await query('ROLLBACK');
-    console.error('Error al crear el pedido:', err);
-    res.status(500).json({
-      success: false,
-      data: 'Error al crear el pedido',
-    });
+    console.error('Error al actualizar estado del pedido:', error);
+    res.error('Error al actualizar estado del pedido', 500);
   }
 };
