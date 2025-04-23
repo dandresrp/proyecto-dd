@@ -19,16 +19,22 @@ const swaggerOptions = {
         description: 'Development server',
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
   },
-  apis: [
-    './src/routes/*.js',
-    './src/models/*.js',
-  ],
+  apis: ['./src/routes/*.js', './src/models/*.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-const swaggerDocs = (app) => {
+const swaggerDocs = app => {
   app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
   console.log(`Swagger docs available at http://localhost:${port}/api/docs`);
 };
