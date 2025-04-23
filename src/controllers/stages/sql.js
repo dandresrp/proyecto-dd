@@ -1,1 +1,1 @@
-export const SQL_GET_ALL_STAGES = 'SELECT * FROM estados';j
+export const SQL_GET_ALL_STAGES = 'SELECT * FROM estados';

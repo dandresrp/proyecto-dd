@@ -1,4 +1,4 @@
-import { query, pool } from '../../config/database/db.js';
+import { query, pool } from '../../config/db.js';
 import { SQL_GET_ALL_ROLES } from './sql.js';
 
 export const getAllRoles = async (req, res) => {

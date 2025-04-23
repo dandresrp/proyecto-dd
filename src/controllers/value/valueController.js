@@ -1,4 +1,4 @@
-import { query } from '../../config/database/db.js';
+import { query } from '../../config/db.js';
 import { SQL_GET_ALL_VALUES } from './sql.js';
 
 export const getAllValues = async (req, res) => {
