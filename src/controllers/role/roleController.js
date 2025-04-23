@@ -1,10 +1,9 @@
-import { query, pool } from '../../config/db.js';
-import { SQL_GET_ALL_ROLES } from './sql.js';
+import { getAllRoles as getRoles } from '../../services/role/roleService.js';
 
 export const getAllRoles = async (req, res) => {
   try {
-    const result = await query(SQL_GET_ALL_ROLES);
-    res.success(result.rows);
+    const roles = await getRoles();
+    res.success(roles);
   } catch (error) {
     console.error('Error al obtener roles: ', error);
     res.error('Error al obtener roles');
