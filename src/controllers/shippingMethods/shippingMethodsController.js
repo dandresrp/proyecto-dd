@@ -1,10 +1,9 @@
-import { query } from '../../config/db.js';
-import { SQL_GET_ALL_SHIPPING_METHODS } from './sql.js';
+import { getAllShippingMethods as getShippingMethods } from '../../services/shippingMethods/shippingMethodService.js';
 
 export const getAllShippingMethods = async (req, res) => {
   try {
-    const result = await query(SQL_GET_ALL_SHIPPING_METHODS);
-    res.success(result.rows);
+    const shippingMethods = await getShippingMethods();
+    res.success(shippingMethods);
   } catch (error) {
     console.error('Error al obtener métodos de envío:', error);
     res.error('Error al obtener métodos de envío');
