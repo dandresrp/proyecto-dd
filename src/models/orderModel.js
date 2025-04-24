@@ -1,5 +1,5 @@
-import { query } from '../../config/database/db.js';
-import { SQL_GET_ALL_ORDERS } from '../../controllers/orders/sql.js';
+import { query } from '../../src/config/db.js';
+import { SQL_GET_ALL_ORDERS } from '../../src/controllers/orders/sql.js';
 
 export const findAllOrders = async (estado, nombre_cliente, pedido_id) => {
   const result = await query(SQL_GET_ALL_ORDERS, [

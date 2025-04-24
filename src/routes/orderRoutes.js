@@ -1,7 +1,6 @@
 import express from 'express';
 import { authenticateJWT, authorizeAdmin } from '../middlewares/auth.js';
 import * as ordersController from '../controllers/orders/ordersController.js';
-import e from 'express';
 
 const router = express.Router();
 
