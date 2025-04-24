@@ -5,7 +5,7 @@ Esta API RESTful desarrollada con Node.js y Express permite gestionar un sistema
 ## Estructura del Proyecto
 
 ```
-API-REST-DD/
+proyecto-dd/
 ├── src/
 │   ├── app.js                  # Punto de entrada de la aplicación
 │   ├── config/                 # Configuraciones (base de datos, swagger)
