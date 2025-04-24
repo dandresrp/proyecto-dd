@@ -1,4 +1,4 @@
-import { getAllShippingMethods as getShippingMethods } from '../../services/shippingMethodService.js';
+import { getAllShippingMethods as getShippingMethods } from '../../services/shippingMethod/shippingMethodService.js';
 
 export const getAllShippingMethods = async (req, res) => {
   try {
