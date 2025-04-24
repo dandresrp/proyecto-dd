@@ -12,6 +12,7 @@ import stagesRoutes from './routes/stagesRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import valueRoutes from './routes/valueRoutes.js';
 import { responseHandler } from './middlewares/responseHandler.js';
+import { logger } from './middlewares/log.js';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cors());
 app.use(responseHandler);
+app.use(logger);
 swaggerDocs(app);
 
 app.get('/', (req, res) => {
