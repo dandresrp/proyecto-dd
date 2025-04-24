@@ -1,7 +1,4 @@
-import {
-  findAllOrders,
-  findOrderById,
-} from '../../models/orders/orderModel.js';
+import { findAllOrders, findOrderById } from '../../src/models/orderModel.js';
 
 export const getAllOrders = async (estado, nombre_cliente, pedido_id) => {
   try {

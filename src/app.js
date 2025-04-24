@@ -4,6 +4,7 @@ import cors from 'cors';
 import swaggerDocs from './config/swagger.js';
 import authRoutes from './routes/authRoutes.js';
 import clientRoutes from './routes/clientRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 import reportRoutes from './routes/reportRoutes.js';
 import roleRoutes from './routes/roleRoutes.js';
 import shippingMethodsRoutes from './routes/shippingMethodsRouter.js';
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/usuarios', userRoutes);
 app.use('/api/clientes', clientRoutes);
+app.use('/api/pedidos', orderRoutes);
 app.use('/api/reportes', reportRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/metodos-de-envio', shippingMethodsRoutes);
