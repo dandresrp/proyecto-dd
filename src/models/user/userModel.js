@@ -1,10 +1,10 @@
-import { query } from '../../src/config/db.js';
+import { query } from '../../config/db.js';
 import {
   SQL_GET_ALL_USERS,
   SQL_GET_USER_BY_ID,
   SQL_UPDATE_USER,
   SQL_DELETE_USER,
-} from '../../src/controllers/user/sql.js';
+} from '../../controllers/user/sql.js';
 
 export const findAllUsers = async () => {
   const result = await query(SQL_GET_ALL_USERS);

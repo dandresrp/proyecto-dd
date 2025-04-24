@@ -1,4 +1,4 @@
-import { createLog } from '../models/logModel.js';
+import { createLog } from '../models/log/logModel.js';
 
 export const logger = (req, res, next) => {
   let statusCode;

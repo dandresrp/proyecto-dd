@@ -1,6 +1,6 @@
 import express from 'express';
-import { authenticateJWT, authorizeAdmin } from '../middlewares/auth.js';
-import * as shippingMethodsController from '../controllers/shippingMethods/shippingMethodsController.js';
+import { authenticateJWT, authorizeAdmin } from '../../middlewares/auth.js';
+import * as shippingMethodsController from '../../controllers/shippingMethods/shippingMethodsController.js';
 
 const router = express.Router();
 

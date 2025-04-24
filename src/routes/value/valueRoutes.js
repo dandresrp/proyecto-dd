@@ -1,6 +1,6 @@
 import express from 'express';
-import { authenticateJWT, authorizeAdmin } from '../middlewares/auth.js';
-import * as valueController from '../controllers/value/valueController.js';
+import { authenticateJWT, authorizeAdmin } from '../../middlewares/auth.js';
+import * as valueController from '../../controllers/value/valueController.js';
 
 const router = express.Router();
 

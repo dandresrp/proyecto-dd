@@ -1,6 +1,6 @@
 import express from 'express';
-import { authenticateJWT, authorizeAdmin } from '../middlewares/auth.js';
-import * as roleController from '../controllers/role/roleController.js';
+import { authenticateJWT, authorizeAdmin } from '../../middlewares/auth.js';
+import * as roleController from '../../controllers/role/roleController.js';
 
 const router = express.Router();
 

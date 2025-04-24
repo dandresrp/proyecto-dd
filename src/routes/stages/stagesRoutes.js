@@ -1,6 +1,6 @@
 import express from 'express';
-import { authenticateJWT, authorizeAdmin } from '../middlewares/auth.js';
-import * as stagesController from '../controllers/stages/stagesController.js';
+import { authenticateJWT, authorizeAdmin } from '../../middlewares/auth.js';
+import * as stagesController from '../../controllers/stages/stagesController.js';
 
 const router = express.Router();
 

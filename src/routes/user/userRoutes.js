@@ -1,6 +1,6 @@
 import express from 'express';
-import { authenticateJWT, authorizeAdmin } from '../middlewares/auth.js';
-import * as userController from '../controllers/user/userController.js';
+import { authenticateJWT, authorizeAdmin } from '../../middlewares/auth.js';
+import * as userController from '../../controllers/user/userController.js';
 
 const router = express.Router();
 

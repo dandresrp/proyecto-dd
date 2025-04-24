@@ -3,7 +3,7 @@ import {
   getOrderById as getOrder,
   createOrder as createNewOrder,
   updateOrderStatus as updateOrderState, // Nueva importación
-} from '../../services/orderService.js';
+} from '../../services/order/orderService.js';
 
 export const getAllOrders = async (req, res) => {
   try {
@@ -32,55 +32,31 @@ export const getOrderById = async (req, res) => {
 
 export const createOrder = async (req, res) => {
   try {
-    const { 
-      pedido_id, 
-      cliente_id, 
-      usuario_id, 
-      notas, 
-      metodo_id, 
-      fecha_estimada_entrega, 
-      hora_estimada_entrega, 
-      detalles 
-    } = req.body;
-    
-    const newOrder = await createNewOrder(
-      pedido_id,
-      cliente_id,
-      usuario_id || req.usuario.usuario_id, 
-      notas,
-      metodo_id,
-      fecha_estimada_entrega,
-      hora_estimada_entrega,
-      detalles
-    );
-    
-    res.success(newOrder, 'Pedido creado exitosamente', 201);
+    if (!req.usuario || !req.usuario.usuario_id) {
+      return res.error('Unauthorized', 401);
+    }
+
+    const orderData = req.body;
+
+    const newOrder = await createNewOrder(orderData, req.usuario.usuario_id);
+
+    res.success(newOrder, 'Pedido creado correctamente', 201);
   } catch (error) {
+    if (error.statusCode) {
+      return res.error(error.message, error.statusCode);
+    }
     console.error('Error creating order:', error);
-    if (error.message === 'Datos incompletos para crear el pedido') {
-      return res.error('Faltan datos requeridos para crear el pedido', 400);
-    }
-    if (error.message === 'Formato de detalles inválido') {
-      return res.error('El formato de los detalles del pedido es inválido', 400);
-    }
-    if (error.message === 'Cliente no encontrado') {
-      return res.error('El cliente especificado no existe', 404);
-    }
-    if (error.message === 'Producto no encontrado') {
-      return res.error('Uno o más productos especificados no existen', 404);
-    }
     res.error('Error al crear el pedido', 500);
   }
 };
 
-// Nuevo método para actualizar el estado del pedido
 export const updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { estado_id } = req.body;
-    
+
     const updatedOrder = await updateOrderState(id, estado_id);
-    
+
     res.success(updatedOrder, 'Estado del pedido actualizado exitosamente');
   } catch (error) {
     console.error('Error updating order status:', error);

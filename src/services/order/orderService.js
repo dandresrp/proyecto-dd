@@ -3,7 +3,7 @@ import {
   findOrderById,
   createNewOrder,
   updateOrderStatus as updateOrderStatusModel,
-} from '../../models/orderModel.js';
+} from '../../models/order/orderModel.js';
 
 export const getAllOrders = async (estado, nombre_cliente, pedido_id) => {
   try {
@@ -29,82 +29,70 @@ export const getOrderById = async id => {
   }
 };
 
-// Add the new service method
-export const createOrder = async (
-  pedido_id,
-  cliente_id,
-  usuario_id,
-  notas,
-  metodo_id,
-  fecha_estimada_entrega,
-  hora_estimada_entrega,
-  detalles,
-) => {
+export const createOrder = async (orderData, usuario_id) => {
   try {
-    // Validate required fields
+    if (!orderData.cliente_id) {
+      const error = new Error('El cliente es requerido');
+      error.statusCode = 400;
+      throw error;
+    }
+
     if (
-      !pedido_id ||
-      !cliente_id ||
-      !usuario_id ||
-      !metodo_id ||
-      !fecha_estimada_entrega ||
-      !hora_estimada_entrega
+      !orderData.total ||
+      isNaN(parseFloat(orderData.total)) ||
+      parseFloat(orderData.total) <= 0
     ) {
-      const error = new Error('Datos incompletos para crear el pedido');
+      const error = new Error('El total debe ser un número positivo');
       error.statusCode = 400;
       throw error;
     }
 
-    // Validate detalles format
-    if (!detalles || !Array.isArray(detalles) || detalles.length === 0) {
-      const error = new Error('Formato de detalles inválido');
-      error.statusCode = 400;
-      throw error;
+    const currentYear = new Date().getFullYear();
+    const orderNumber = Math.floor(10000 + Math.random() * 90000);
+    const pedido_id = `PED-${currentYear}-${orderNumber.toString().padStart(5, '0')}`;
+
+    const estado_id = orderData.estado_id || 1;
+
+    let fecha_estimada_entrega = orderData.fecha_estimada_entrega;
+    if (!fecha_estimada_entrega) {
+      const date = new Date();
+      date.setDate(date.getDate() + 5);
+      fecha_estimada_entrega = date.toISOString().split('T')[0];
     }
 
-    // Check if all products have producto_id and cantidad
-    for (const producto of detalles) {
-      if (!producto.producto_id || !producto.cantidad) {
-        const error = new Error('Formato de detalles inválido');
-        error.statusCode = 400;
-        throw error;
-      }
-    }
-
-    return await createNewOrder(
+    const newOrder = await createNewOrder(
       pedido_id,
-      cliente_id,
+      orderData.cliente_id,
       usuario_id,
-      notas,
-      metodo_id,
+      orderData.notas || '',
+      estado_id,
+      parseFloat(orderData.total),
       fecha_estimada_entrega,
-      hora_estimada_entrega,
-      detalles,
+      orderData.metodo_id || 1,
+      orderData.hora_estimada_entrega || '12:00:00',
     );
+
+    return newOrder;
   } catch (error) {
     console.error('Error in order service (createOrder):', error);
     throw error;
   }
 };
 
-// Nuevo meodo para actualizar el estado del pedido
 export const updateOrderStatus = async (pedido_id, estado_id) => {
   try {
-    // Validar que el ID del pedido exista
     if (!pedido_id) {
       const error = new Error('ID del pedido es requerido');
       error.statusCode = 400;
       throw error;
     }
 
-    // Validar que el estado sea válido
     if (!estado_id || isNaN(parseInt(estado_id))) {
       const error = new Error('Estado inválido');
       error.statusCode = 400;
       throw error;
     }
 
-    // Verificar que el pedido exista
     const orders = await findOrderById(pedido_id);
     if (orders.length === 0) {
       const error = new Error('Pedido no encontrado');
@@ -112,7 +100,6 @@ export const updateOrderStatus = async (pedido_id, estado_id) => {
       throw error;
     }
 
-    // Obtener el nombre del estado para usar en la nota
     let estadoNombre;
     switch (parseInt(estado_id)) {
       case 1:
@@ -137,7 +124,6 @@ export const updateOrderStatus = async (pedido_id, estado_id) => {
         estadoNombre = 'Cambio de estado';
     }
 
-    // Actualizar el estado
     return await updateOrderStatusModel(pedido_id, estado_id, estadoNombre);
   } catch (error) {
     console.error('Error in order service (updateOrderStatus):', error);

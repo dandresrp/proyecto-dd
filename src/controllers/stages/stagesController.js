@@ -1,4 +1,4 @@
-import { getAllStages as getStages } from '../../services/stageService.js';
+import { getAllStages as getStages } from '../../services/stage/stageService.js';
 
 export const getAllStages = async (req, res) => {
   try {

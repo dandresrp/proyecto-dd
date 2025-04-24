@@ -1,4 +1,4 @@
-import { query, pool } from '../config/db.js';
+import { query } from '../../config/db.js';
 
 export const getAllClients = async () => {
   const result = await query('SELECT * FROM clientes ORDER BY nombre');

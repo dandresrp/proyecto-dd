@@ -1,4 +1,4 @@
-import { findAllRoles } from '../../models/rolseModel.js';
+import { findAllRoles } from '../../models/role/roleModel.js';
 
 export const getAllRoles = async () => {
   try {

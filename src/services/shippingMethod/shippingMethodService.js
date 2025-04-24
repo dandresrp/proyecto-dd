@@ -1,4 +1,4 @@
-import { findAllShippingMethods } from '../../models/shippingMethodModel.js';
+import { findAllShippingMethods } from '../../models/shippingMethod/shippingMethodModel.js';
 
 export const getAllShippingMethods = async () => {
   try {
