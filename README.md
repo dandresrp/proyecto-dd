@@ -1,5 +1,5 @@
-
 ## Descripción General
+
 Esta API RESTful desarrollada con Node.js y Express permite gestionar un sistema de pedidos, clientes, usuarios y generación de reportes. Implementa una arquitectura en capas (controladores, servicios, modelos) con autenticación JWT para proteger los endpoints.
 
 ## Estructura del Proyecto
@@ -14,7 +14,6 @@ API-REST-DD/
 │   ├── models/                 # Modelos de datos y consultas a BD
 │   ├── routes/                 # Definición de rutas de la API
 │   ├── services/               # Lógica de negocio
-│   └── utils/                  # Utilidades generales
 ├── .editorconfig               # Configuración del editor
 ├── .env.example                # Plantilla para variables de entorno
 ├── .gitignore                  # Archivos ignorados por Git
@@ -39,17 +38,20 @@ API-REST-DD/
 ## Instalación
 
 1. Clone el repositorio:
+
    ```bash
    git clone https://github.com/dandresrp/proyecto-dd.git
    cd .\proyecto-dd\
    ```
 
 2. Instale las dependencias:
+
    ```bash
    npm install
    ```
 
 3. Configure el archivo `.env` basado en `.env.example`:
+
    ```
    PORT=
    DATABASE_URL=
@@ -85,17 +87,20 @@ La aplicación está estructurada en capas:
 ## API Endpoints
 
 ### Autenticación
+
 - `POST /api/auth/sign-in`: Iniciar sesión
 - `POST /api/auth/sign-up`: Registrar usuario (admin)
 - `POST /api/auth/refresh-token`: Renovar token
 
 ### Usuarios
+
 - `GET /api/usuarios`: Listar todos
 - `GET /api/usuarios/{id}`: Obtener por ID
 - `PUT /api/usuarios/{id}`: Actualizar
 - `DELETE /api/usuarios/{id}`: Eliminar
 
 ### Clientes
+
 - `GET /api/clientes`: Listar todos
 - `GET /api/clientes/{id}`: Obtener por ID
 - `POST /api/clientes`: Crear nuevo
@@ -103,9 +108,11 @@ La aplicación está estructurada en capas:
 - `DELETE /api/clientes/{id}`: Eliminar
 
 ### Pedidos
+
 - `GET /api/pedidos`: Listar todos (con filtros opcionales)
 
 ### Reportes
+
 - `GET /api/reportes/orders-by-month`: Pedidos por mes
 - `GET /api/reportes/income-by-month`: Ingresos por mes
 - `GET /api/reportes/pending-orders`: Pedidos pendientes
@@ -116,6 +123,7 @@ La aplicación está estructurada en capas:
 - `GET /api/reportes/production-capacity`: Capacidad de producción
 
 ### Datos Maestros
+
 - `GET /api/roles`: Listar roles
 - `GET /api/estados`: Listar estados
 - `GET /api/metodos-de-envio`: Listar métodos de envío
