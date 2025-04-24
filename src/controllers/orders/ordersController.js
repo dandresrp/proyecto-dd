@@ -1,7 +1,8 @@
 import {
   getAllOrders as getOrders,
   getOrderById as getOrder,
-  createOrder as createNewOrder, // Add this import
+  createOrder as createNewOrder,
+  updateOrderStatus as updateOrderState, // Nueva importación
 } from '../../services/orderService.js';
 
 export const getAllOrders = async (req, res) => {
@@ -29,7 +30,6 @@ export const getOrderById = async (req, res) => {
   }
 };
 
-// Add the new controller method
 export const createOrder = async (req, res) => {
   try {
     const { 
@@ -46,7 +46,7 @@ export const createOrder = async (req, res) => {
     const newOrder = await createNewOrder(
       pedido_id,
       cliente_id,
-      usuario_id || req.usuario.usuario_id, // Use authenticated user if not provided
+      usuario_id || req.usuario.usuario_id, 
       notas,
       metodo_id,
       fecha_estimada_entrega,
@@ -70,5 +70,29 @@ export const createOrder = async (req, res) => {
       return res.error('Uno o más productos especificados no existen', 404);
     }
     res.error('Error al crear el pedido', 500);
+  }
+};
+
+// Nuevo método para actualizar el estado del pedido
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { estado_id } = req.body;
+    
+    const updatedOrder = await updateOrderState(id, estado_id);
+    
+    res.success(updatedOrder, 'Estado del pedido actualizado exitosamente');
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    if (error.message === 'ID del pedido es requerido') {
+      return res.error('ID del pedido es requerido', 400);
+    }
+    if (error.message === 'Estado inválido') {
+      return res.error('Estado inválido', 400);
+    }
+    if (error.message === 'Pedido no encontrado') {
+      return res.error('Pedido no encontrado', 404);
+    }
+    res.error('Error al actualizar estado del pedido', 500);
   }
 };

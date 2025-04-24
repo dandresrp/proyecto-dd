@@ -1,5 +1,5 @@
 import { query, pool } from '../../src/config/db.js';
-import { SQL_GET_ALL_ORDERS, SQL_CREATE_ORDER } from '../../src/controllers/orders/sql.js';
+import { SQL_GET_ALL_ORDERS, SQL_CREATE_ORDER, SQL_UPDATE_ORDER_STATUS } from '../../src/controllers/orders/sql.js';
 
 export const findAllOrders = async (estado, nombre_cliente, pedido_id) => {
   const result = await query(SQL_GET_ALL_ORDERS, [
@@ -15,7 +15,6 @@ export const findOrderById = async id => {
   return result.rows;
 };
 
-// Add the new function to create an order using the stored procedure
 export const createNewOrder = async (
   pedido_id,
   cliente_id,
@@ -42,8 +41,33 @@ export const createNewOrder = async (
       JSON.stringify(detalles)
     ]);
     
-    // Get the created order
     const result = await client.query('SELECT * FROM pedidos WHERE pedido_id = $1', [pedido_id]);
+    
+    await client.query('COMMIT');
+    return result.rows[0];
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+};
+
+export const updateOrderStatus = async (pedido_id, estado_id, estadoNombre) => {
+  const client = await pool.connect();
+  
+  try {
+    await client.query('BEGIN');
+    
+    const result = await client.query(SQL_UPDATE_ORDER_STATUS, [
+      estado_id,
+      estadoNombre,
+      pedido_id
+    ]);
+    
+    if (result.rows.length === 0) {
+      throw new Error('Pedido no encontrado');
+    }
     
     await client.query('COMMIT');
     return result.rows[0];

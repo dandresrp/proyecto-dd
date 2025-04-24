@@ -138,4 +138,45 @@ router.get('/:id', authenticateJWT, ordersController.getOrderById);
  */
 router.post('/', authenticateJWT, ordersController.createOrder);
 
+/**
+ * @swagger
+ * /api/pedidos/{id}/estado:
+ *   put:
+ *     summary: Actualizar el estado de un pedido
+ *     tags: [Pedidos]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del pedido
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               estado_id:
+ *                 type: integer
+ *                 description: ID del nuevo estado (1=Creado, 2=En Producción, 3=En Espera, 4=En Envío, 5=Finalizado, 6=Rechazado)
+ *             required:
+ *               - estado_id
+ *     responses:
+ *       200:
+ *         description: Estado del pedido actualizado exitosamente
+ *       400:
+ *         description: Datos inválidos
+ *       401:
+ *         description: No autorizado
+ *       404:
+ *         description: Pedido no encontrado
+ *       500:
+ *         description: Error del servidor
+ */
+router.put('/:id/estado', authenticateJWT, ordersController.updateOrderStatus);
+
 export default router;

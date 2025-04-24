@@ -8,7 +8,21 @@ export const SQL_GET_ALL_ORDERS = `
     AND ($3::text IS NULL OR CAST(p.pedido_id AS TEXT) LIKE '%' || $3 || '%');
 `;
 
-// Add the SQL for calling the stored procedure
 export const SQL_CREATE_ORDER = `
   CALL crear_pedido_con_validacion($1, $2, $3, $4, $5, $6, $7, $8::jsonb);
+`;
+
+export const SQL_UPDATE_ORDER_STATUS = `
+  UPDATE public.pedidos
+  SET 
+    estado_id = $1,
+    fecha_modificacion = CURRENT_TIMESTAMP,
+    fecha_finalizacion = CASE
+                          WHEN $1 = 5 THEN CURRENT_TIMESTAMP  
+                          ELSE fecha_finalizacion
+                         END,
+    notas = COALESCE(notas, '') || E'\n[' || CURRENT_DATE || '] Cambio de estado: ' || $2
+  WHERE 
+    pedido_id = $3
+  RETURNING *;
 `;

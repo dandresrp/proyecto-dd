@@ -1,4 +1,4 @@
-import { findAllOrders, findOrderById, createNewOrder } from '../../src/models/orderModel.js';
+import { findAllOrders, findOrderById, createNewOrder, updateOrderStatus as updateOrderStatusModel } from '../../src/models/orderModel.js';
 
 export const getAllOrders = async (estado, nombre_cliente, pedido_id) => {
   try {
@@ -71,6 +71,64 @@ export const createOrder = async (
     );
   } catch (error) {
     console.error('Error in order service (createOrder):', error);
+    throw error;
+  }
+};
+
+// Nuevo meodo para actualizar el estado del pedido
+export const updateOrderStatus = async (pedido_id, estado_id) => {
+  try {
+    // Validar que el ID del pedido exista
+    if (!pedido_id) {
+      const error = new Error('ID del pedido es requerido');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    // Validar que el estado sea válido
+    if (!estado_id || isNaN(parseInt(estado_id))) {
+      const error = new Error('Estado inválido');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    // Verificar que el pedido exista
+    const orders = await findOrderById(pedido_id);
+    if (orders.length === 0) {
+      const error = new Error('Pedido no encontrado');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    // Obtener el nombre del estado para usar en la nota
+    let estadoNombre;
+    switch (parseInt(estado_id)) {
+      case 1:
+        estadoNombre = "Creado";
+        break;
+      case 2:
+        estadoNombre = "En Produccion";
+        break;
+      case 3:
+        estadoNombre = "En Espera";
+        break;
+      case 4:
+        estadoNombre = "En Envio";
+        break;
+      case 5:
+        estadoNombre = "Finalizado";
+        break;
+      case 6:
+        estadoNombre = "Rechazado";
+        break;
+      default:
+        estadoNombre = "Cambio de estado";
+    }
+
+    // Actualizar el estado
+    return await updateOrderStatusModel(pedido_id, estado_id, estadoNombre);
+  } catch (error) {
+    console.error('Error in order service (updateOrderStatus):', error);
     throw error;
   }
 };
