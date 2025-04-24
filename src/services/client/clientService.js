@@ -1,5 +1,5 @@
-import { pool } from '../config/db.js';
-import * as clientModel from '../models/clientModel.js';
+import { pool } from '../../config/db.js';
+import * as clientModel from '../../models/clientModel.js';
 
 export const getAllClients = async () => {
   return await clientModel.getAllClients();

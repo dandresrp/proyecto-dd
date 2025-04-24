@@ -1,4 +1,9 @@
-import { findAllOrders, findOrderById, createNewOrder, updateOrderStatus as updateOrderStatusModel } from '../../src/models/orderModel.js';
+import {
+  findAllOrders,
+  findOrderById,
+  createNewOrder,
+  updateOrderStatus as updateOrderStatusModel,
+} from '../../models/orderModel.js';
 
 export const getAllOrders = async (estado, nombre_cliente, pedido_id) => {
   try {
@@ -33,11 +38,18 @@ export const createOrder = async (
   metodo_id,
   fecha_estimada_entrega,
   hora_estimada_entrega,
-  detalles
+  detalles,
 ) => {
   try {
     // Validate required fields
-    if (!pedido_id || !cliente_id || !usuario_id || !metodo_id || !fecha_estimada_entrega || !hora_estimada_entrega) {
+    if (
+      !pedido_id ||
+      !cliente_id ||
+      !usuario_id ||
+      !metodo_id ||
+      !fecha_estimada_entrega ||
+      !hora_estimada_entrega
+    ) {
       const error = new Error('Datos incompletos para crear el pedido');
       error.statusCode = 400;
       throw error;
@@ -67,7 +79,7 @@ export const createOrder = async (
       metodo_id,
       fecha_estimada_entrega,
       hora_estimada_entrega,
-      detalles
+      detalles,
     );
   } catch (error) {
     console.error('Error in order service (createOrder):', error);
@@ -104,25 +116,25 @@ export const updateOrderStatus = async (pedido_id, estado_id) => {
     let estadoNombre;
     switch (parseInt(estado_id)) {
       case 1:
-        estadoNombre = "Creado";
+        estadoNombre = 'Creado';
         break;
       case 2:
-        estadoNombre = "En Produccion";
+        estadoNombre = 'En Produccion';
         break;
       case 3:
-        estadoNombre = "En Espera";
+        estadoNombre = 'En Espera';
         break;
       case 4:
-        estadoNombre = "En Envio";
+        estadoNombre = 'En Envio';
         break;
       case 5:
-        estadoNombre = "Finalizado";
+        estadoNombre = 'Finalizado';
         break;
       case 6:
-        estadoNombre = "Rechazado";
+        estadoNombre = 'Rechazado';
         break;
       default:
-        estadoNombre = "Cambio de estado";
+        estadoNombre = 'Cambio de estado';
     }
 
     // Actualizar el estado

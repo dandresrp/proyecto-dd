@@ -1,4 +1,4 @@
-import { findAllValues } from '../../src/models/valueModel.js';
+import { findAllValues } from '../../models/valueModel.js';
 
 export const getAllValues = async () => {
   try {

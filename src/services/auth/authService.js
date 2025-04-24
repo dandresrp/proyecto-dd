@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { pool } from '../config/db.js';
-import * as authModel from '../models/authModel.js';
+import { pool } from '../../config/db.js';
+import * as authModel from '../../models/authModel.js';
 
 export const registerUser = async userData => {
   const { nombre, nombre_usuario, rol, correo, contrasena } = userData;

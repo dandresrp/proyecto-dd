@@ -7,7 +7,7 @@ import {
   findBestSellingProductsHistory,
   findInventory,
   findProductionCapacity,
-} from '../../src/models/reportModel.js';
+} from '../../models/reportModel.js';
 
 export const getOrdersByMonth = async (startDate, endDate, offset, limit) => {
   try {

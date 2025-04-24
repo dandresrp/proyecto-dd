@@ -1,4 +1,4 @@
-import { query } from '../config/db.js';
+import { query } from '../../config/db.js';
 
 export const createLog = async (
   usuario_id,
