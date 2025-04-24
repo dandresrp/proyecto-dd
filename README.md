@@ -154,3 +154,9 @@ La documentación interactiva está disponible en la ruta `/api/docs` con Swagge
 ## Scripts Disponibles
 
 - `npm start`: Inicia el servidor de desarrollo
+
+## Demo
+
+- API: https://proyecto-dd-api.onrender.com/
+
+- Documentación: https://proyecto-dd-api.onrender.com/api/docs/
